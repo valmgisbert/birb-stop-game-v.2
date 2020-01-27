@@ -1,0 +1,19 @@
+body {
+    background-color: lightgray;
+    height: 100vh;
+}
+
+canvas {
+    border: 15px solid yellow;
+}
+
+section {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+button {
+    color: white;
+    background-color: tomato;
+}

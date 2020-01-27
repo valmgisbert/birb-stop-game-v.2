@@ -3,8 +3,8 @@
 function Player(canvas){
 	this.canvas = canvas;
 	this.ctx = canvas.getContext('2d');
-  this.x = 100;
-  this.y = canvas.height + this.height; //TRY IT OUT
+  this.x = 200;
+  this.y = canvas.height / 2; //TRY IT OUT
   this.width = 35;
   this.height = 85;
   this.speed = 5; 
@@ -14,7 +14,6 @@ function Player(canvas){
 Player.prototype.setDirection = function(direction) {
 	if (direction === 'up') this.direction = -1;
 	else if (direction === 'down') this.direction = 1;
-	else if (direction === 'stop') this.direction = 0;
 }
 
 Player.prototype.didCollideWithPlayer = function(enemyBird) {
@@ -38,8 +37,8 @@ Player.prototype.draw = function(){
   this.ctx.fillRect(
     this.x,
     this.y,
-    this.size,
-    this.size,
+    this.width,
+    this.height,
   );
 }
 
@@ -48,11 +47,11 @@ Player.prototype.updatePosition = function () {
 	this.y = this.y + (this.direction * this.speed); //+10 or -10
 }
 
-Player.prototype.handleScreenCollision = function() { //should i keep it?? i mean it helps the barrier not stray but removing the borders might raise some difficulty i think
+Player.prototype.handleScreenCollision = function() { 
   var screenTop = 0;
   var screenBottom = this.canvas.height;
 
-  if (this.y > screenBottom) this.direction = -1;
+  if (this.y + this.height > screenBottom) this.direction = -1;
   else if (this.y < screenTop) this.direction = 1;
 };
 

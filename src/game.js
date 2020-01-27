@@ -6,14 +6,12 @@ function Game(){
 
 	this.enemyBirds = [];
 	this.player = null;
+	this.tower = null;
 
 	this.gameIsOver = false;
 	this.gameScreen = null;
 	/*this.timer = 0;*/ //do i start it like this or??? answer: GO BACKWARDS!!
 }
-
-this.canvas = document.querySelector('canvas');
-console.log(this.canvas); //check for this
 
 Game.prototype.start = function() {
 	this.canvasContainer = document.querySelector('.canvas-container');
@@ -29,6 +27,8 @@ Game.prototype.start = function() {
 	this.canvas.setAttribute('height', containerHeight);
 
 	this.player = new Player(this.canvas);
+	this.tower = new Tower(this.canvas);
+	// this.enemyBirds = new EnemyBird(this.canvas);
 	
 	//event listeners for player moving
 	this.handleKeyDown = function(event) {
@@ -39,7 +39,7 @@ Game.prototype.start = function() {
     else if (event.key === 'ArrowDown') {
       console.log('DOWN');
       this.player.setDirection('down');
-    }
+    } 
 	};
 	  
   window.addEventListener('keydown', 
@@ -50,20 +50,45 @@ Game.prototype.start = function() {
 
 Game.prototype.startLoop = function() {
 	var loop = function() {
-		
+		//PUT THE ENEMIES IN THE SCREEN
 		if (Math.random() > 0.98) { //lower number, more enemies
 			var randomY = this.canvas.height * Math.random();
 			var newEnemy = new EnemyBird(this.canvas, randomY, parseInt(10 * Math.random())); //using the template form the enemy.js [YOU CAN RANDOM SPEED]
 
 			this.enemyBirds.push(newEnemy); //to add every enemy appearing to the array
 		}
+		//UPDATE PLAYER
+		this.player.updatePosition();
+		//HANDLESCREENCOLS FOR PLAYER
+		this.player.handleScreenCollision();
+		//UPDATE EXISTING ENEMIES
+		this.enemyBirds.forEach(function(enemyBirdObj) {
+			enemyBirdObj.updatePosition();
+		})
+		//CHECK COLLS TO PLAYER
+		//this.checkCollisionsToPlayer();
+		//CHECK COLLS TO TOWER
+		//this.checkCollisionsToTower();
 
+		//CLEAR CANVAS
+		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+		//DRAW PLAYER
+		this.player.draw();
+		//DRAW ENEMIES
+		this.enemyBirds.forEach(function(enemyBirdObj) {
+			enemyBirdObj.draw();
+		})
+		//DRAW TOWER
+		this.tower.draw();
+
+		//END LOOP IF GAME IS OVER
     if (!this.gameIsOver) {
       window.requestAnimationFrame(loop);
     }
   }.bind(this); //to find it again within game
 
-  window.requestAnimationFrame(loop);
+  loop();
 };
 
 Game.prototype.checkCollisionsToTower = function() {
@@ -77,17 +102,23 @@ Game.prototype.checkCollisionsToTower = function() {
 Game.prototype.checkCollisionsToPlayer = function() {
 	this.enemyBirds.forEach(function(enemyBird) {
 		if (this.player.didCollideWithPlayer(enemyBird)) {
-				
+				this.bounceBack();
 		}
-	})
-};
+	}, this);
+}
 
 Game.prototype.updateGameStats = function() {};
 
-Game.prototype.passGameOverCallback = function(callback) {};
+Game.prototype.passGameOverCallback = function(gameOverFunc) {
+	this.reStart = gameOverFunc;
+};
 
-Game.prototype.setGameOver = function() {};
+Game.prototype.setGameOver = function() {
+	this.gameIsOver = true;
 
-Game.prototype.removeGameScreen = function() {};
+	this.reStart();
+};
+
+
 
 

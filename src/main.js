@@ -8,6 +8,8 @@ function buildDom(htmlStr) {
 	return div.children[0];
 }
 
+var mainContainer = document.getElementById('game-container');
+
 	function main (){
 		var game;
 		var splashScreen;
@@ -19,8 +21,9 @@ function buildDom(htmlStr) {
 					<h1>BIRB STOP!</h1>
 					<button>Start</button>
 				</main>`);
-			
-			document.body.appendChild(splashScreen);
+
+			mainContainer.appendChild(splashScreen);
+
 
 			var startBtn = splashScreen.querySelector('button');
 
@@ -35,7 +38,7 @@ function buildDom(htmlStr) {
 
 	function buildGameScreen() {
 		var gameScreen = buildDom(`
-			<main class="game-container">
+			<div>
 				<header>
 					<section class="game-status">
 						<div class="timer"></div>
@@ -44,9 +47,11 @@ function buildDom(htmlStr) {
 				<div class="canvas-container">
 					<canvas width="680" height="440"></canvas>
 				</div>
-			</main>`)
+			</div>`)
 			
-		document.body.appendChild(gameScreen);
+		mainContainer.appendChild(gameScreen);
+		console.log(mainContainer);
+
 		return gameScreen;
 		}
 
@@ -62,7 +67,7 @@ function buildDom(htmlStr) {
 				<button>Restart</button>
 			</main>`);
 
-		document.body.appendChild(gameOverScreen);
+		mainContainer.appendChild(gameOverScreen);
 
 		var restartBtn = gameOverScreen.querySelector('button');
 

@@ -27,6 +27,10 @@ EnemyBird.prototype.updatePosition = function() {
 }
   
 EnemyBird.prototype.bounceBack = function() {
-	
+	this.updatePosition();
+
+	if (didCollideWithPlayer(enemyBird) === true) {
+		this.direction = +1; //CHECK IF THIS IS RIGHT
+	}
 }
   

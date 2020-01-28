@@ -4,15 +4,16 @@ function EnemyBird(canvas, y, speed) {
   this.canvas = canvas;
   this.ctx = canvas.getContext('2d');
   this.size = 35;
-  this.x = canvas.width + this.size;
+  this.x = canvas.width;
   this.y = y;
 	this.speed = speed;
+	this.direction = -1;
     /*this.width = ;
     this.height = ;*/ //isn't it enough(easier) with the size property? like to add the image, or is that for rects/squares only
 }
 
 EnemyBird.prototype.draw = function() {
-  this.ctx.fillStyle = 'yellow';
+  this.ctx.fillStyle = 'red';
   // fillRect(x, y, width, height)
   this.ctx.fillRect(
     this.x,
@@ -23,14 +24,5 @@ EnemyBird.prototype.draw = function() {
 }
 
 EnemyBird.prototype.updatePosition = function() {
-	this.x = this.x - this.speed;
+	this.x = this.x + this.speed*this.direction;
 }
-  
-EnemyBird.prototype.bounceBack = function() {
-	this.updatePosition();
-
-	if (didCollideWithPlayer(enemyBird) === true) {
-		this.direction = +1; //CHECK IF THIS IS RIGHT
-	}
-}
-  

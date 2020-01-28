@@ -41,11 +41,13 @@ var mainContainer = document.getElementById('game-container');
 			<div>
 				<header>
 					<section class="game-status">
-						<div class="timer"></div>
+						<div class="timer">
+							<span class="label">Time left:</span>
+						</div>
 					</section>
 				</header>
 				<div class="canvas-container">
-					<canvas width="680" height="440"></canvas>
+					<canvas width="860" height="550"></canvas>
 				</div>
 			</div>`)
 			
@@ -59,15 +61,18 @@ var mainContainer = document.getElementById('game-container');
 		game.gameScreen.remove();
 	}
 
-	function buildGameOverScreen(timer) { 
+	function buildGameOverScreen() { 
 		var gameOverScreen = buildDom(`
 			<main id="game-over-sc">
 				<h1>Game over</h1>
-				<p>Your protected your stuff for ${timer} seconds.</span></p>
+				<p>Your protected your stuff for <span></span> seconds.</p>
 				<button>Restart</button>
 			</main>`);
 
 		mainContainer.appendChild(gameOverScreen);
+
+		// var span = gameOverScreen.querySelector('span');
+		// span.innerText = timer;
 
 		var restartBtn = gameOverScreen.querySelector('button');
 
@@ -88,7 +93,9 @@ var mainContainer = document.getElementById('game-container');
 		game.gameScreen = buildGameScreen();
 
 		game.start();
-		game.passGameOverCallback(gameOver); //check this with game
+		game.passGameOverCallback(function() {
+			gameOver();
+		}); //check this with game
 	}
 
 	function gameOver() {

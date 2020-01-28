@@ -6,7 +6,7 @@ function Player(canvas){
   this.x = 200;
   this.y = canvas.height / 2; //TRY IT OUT
   this.width = 35;
-  this.height = 85;
+  this.height = 155;
   this.speed = 5; 
   this.direction = 0;
 }
@@ -16,20 +16,6 @@ Player.prototype.setDirection = function(direction) {
 	else if (direction === 'down') this.direction = 1;
 }
 
-Player.prototype.didCollideWithPlayer = function(enemyBird) {
-	var playerRight = this.x + this.size;
-	var playerLeft = this.x;
-	var enemyBirdLeft = enemyBird.x;
-	var enemyBirdRight = enemyBird.x + enemyBird.size;
-
-	var clashPlayer = enemyBirdLeft <= playerRight && enemyBirdRight >= playerLeft;
-
-	if (clashPlayer) {
-		return true;
-	}
-
-	return false;
-}//CHECK IF THIS IS OKAY
 
 Player.prototype.draw = function(){
 	this.ctx.fillStyle = 'white';

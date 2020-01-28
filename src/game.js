@@ -4,12 +4,14 @@ function Game(){
 	this.canvas = null;
 	this.ctx = null;
 
-	this.enemyBirds = [];
-	this.player = null;
 	this.tower = null;
+	this.player = null;
+	this.enemyArr = [];
 
+	//this.timer = 60;
 	this.gameIsOver = false;
 	this.gameScreen = null;
+
 	/*this.timer = 0;*/ //do i start it like this or??? answer: GO BACKWARDS!!
 }
 
@@ -18,7 +20,7 @@ Game.prototype.start = function() {
   this.canvas = this.canvasContainer.querySelector('canvas');
 	this.ctx = this.canvas.getContext('2d');
 	
-	this.timerElement = this.gameScreen.querySelector('.timer .value');
+	//this.timerElement = this.gameScreen.querySelector('.timer .value');
 
   var containerWidth = this.canvas.width;
 	var containerHeight = this.canvas.height;
@@ -28,16 +30,15 @@ Game.prototype.start = function() {
 
 	this.player = new Player(this.canvas);
 	this.tower = new Tower(this.canvas);
-	// this.enemyBirds = new EnemyBird(this.canvas);
 	
 	//event listeners for player moving
 	this.handleKeyDown = function(event) {
     if (event.key === 'ArrowUp') {
-      console.log('UP');
+
       this.player.setDirection('up');  
     } 
     else if (event.key === 'ArrowDown') {
-      console.log('DOWN');
+
       this.player.setDirection('down');
     } 
 	};
@@ -50,75 +51,135 @@ Game.prototype.start = function() {
 
 Game.prototype.startLoop = function() {
 	var loop = function() {
+		
 		//PUT THE ENEMIES IN THE SCREEN
-		if (Math.random() > 0.98) { //lower number, more enemies
+		if (Math.random() > 0.99) { //lower number, more enemies
 			var randomY = this.canvas.height * Math.random();
-			var newEnemy = new EnemyBird(this.canvas, randomY, parseInt(10 * Math.random())); //using the template form the enemy.js [YOU CAN RANDOM SPEED]
+				if (randomY < 15) {
+					randomY = 30;
+				} else if (randomY > 625) {
+					randomY = 625; //limiting Y
+				};
 
-			this.enemyBirds.push(newEnemy); //to add every enemy appearing to the array
+			var newEnemy = new EnemyBird(this.canvas, randomY, parseInt(5 * Math.random())) //using the template form the enemy.js [YOU CAN RANDOM SPEED]
+			this.enemyArr.push(newEnemy); //to add every enemy appearing to the array
 		}
 		//UPDATE PLAYER
 		this.player.updatePosition();
 		//HANDLESCREENCOLS FOR PLAYER
 		this.player.handleScreenCollision();
 		//UPDATE EXISTING ENEMIES
-		this.enemyBirds.forEach(function(enemyBirdObj) {
+		this.enemyArr.forEach(function(enemyBirdObj) {
 			enemyBirdObj.updatePosition();
-		})
-		//CHECK COLLS TO PLAYER
-		//this.checkCollisionsToPlayer();
-		//CHECK COLLS TO TOWER
-		//this.checkCollisionsToTower();
-
+			//CHECK COLLS TO PLAYER
+			this.didEnemyCollideWithPlayer(enemyBirdObj);
+			//CHECK COLLS TO TOWER
+			this.didEnemyCollideWithTower(enemyBirdObj);
+		}.bind(this));
+		
 		//CLEAR CANVAS
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+		//DRAW TOWER
+		this.tower.draw();
 		//DRAW PLAYER
 		this.player.draw();
 		//DRAW ENEMIES
-		this.enemyBirds.forEach(function(enemyBirdObj) {
+		this.enemyArr.forEach(function(enemyBirdObj) {
 			enemyBirdObj.draw();
 		})
-		//DRAW TOWER
-		this.tower.draw();
-
+		//LIMIT THE AMOUNT OF BIRDS
+		this.checkNumberOfBirdsLeft();
 		//END LOOP IF GAME IS OVER
     if (!this.gameIsOver) {
       window.requestAnimationFrame(loop);
-    }
+		}
+		//UPDATE STATUS
+		this.updateGameStats();
+
   }.bind(this); //to find it again within game
 
   loop();
 };
 
-Game.prototype.checkCollisionsToTower = function() {
-	this.enemyBirds.forEach(function(enemyBird) {
-    if (this.tower.didCollideWithTower(enemyBird)) { //is it necessary that i make the enemies disappear if they touch the tower bc its game over??
-        this.gameOver();
-      }
-  }, this);
-};
+Game.prototype.didEnemyCollideWithPlayer = function(enemyBird) {
+	var playerRight = this.player.x + this.player.width;
+	var playerLeft = this.player.x;
+	var playerTop = this.player.y;
+	var playerBottom = this.player.y + this.player.height;
 
-Game.prototype.checkCollisionsToPlayer = function() {
-	this.enemyBirds.forEach(function(enemyBird) {
-		if (this.player.didCollideWithPlayer(enemyBird)) {
-				this.bounceBack();
-		}
-	}, this);
+	var enemyBirdLeft = enemyBird.x;
+	var enemyBirdRight = enemyBird.x + enemyBird.size;
+	var enemyBirdTop = enemyBird.y;
+	var enemyBirdBottom = enemyBird.y + enemyBird.size;
+
+	var clashPlayerCenter = enemyBirdLeft <= playerRight && enemyBirdRight >= playerLeft;
+	var clashPlayerTop = enemyBirdBottom > playerTop;
+	var clashPlayerBottom = enemyBirdTop < playerBottom;
+
+	var clashTop = (enemyBirdBottom > playerTop && enemyBirdRight > playerLeft && enemyBirdLeft < playerRight && enemyBirdBottom < playerBottom);
+
+	if(clashTop){
+		console.log(
+			'clashTop'
+		);
+	}
+
+	if (clashPlayerCenter && clashPlayerTop && clashPlayerBottom) {
+		enemyBird.direction *= -1;
+	}
+	return false;
 }
 
-Game.prototype.updateGameStats = function() {};
 
-Game.prototype.passGameOverCallback = function(gameOverFunc) {
-	this.reStart = gameOverFunc;
+Game.prototype.checkNumberOfBirdsLeft = function () {
+	console.log('this.enemyArr.length', this.enemyArr.length);
+
+	if (this.enemyArr.length === 7) {
+		this.gameIsOver = true
+		this.setGameOver();
+	}
+}
+
+Game.prototype.didEnemyCollideWithTower = function(enemyBird) {
+	var towerRight = this.tower.x + this.tower.width;
+	var towerLeft = this.tower.x;
+	var towerTop = this.tower.y;
+	var towerBottom = this.tower.y + this.tower.height;
+
+	var enemyBirdLeft = enemyBird.x;
+	var enemyBirdRight = enemyBird.x + enemyBird.size;
+	var enemyBirdTop = enemyBird.y;
+	var enemyBirdBottom = enemyBird.y + enemyBird.size;
+
+	var clashTower = enemyBirdLeft <= towerRight && enemyBirdRight >= towerLeft;
+	var clashTopTower = enemyBirdBottom > towerTop && enemyBirdRight > towerLeft && enemyBirdLeft < towerRight && enemyBirdBottom < towerBottom;
+
+	if (clashTower && clashTopTower) {
+		this.setGameOver();
+	}
+	return false;
+};
+
+Game.prototype.updateGameStats = function() {
+	//this.timer--;
+	//this.timerElement.innerHTML = this.timer;
+};
+
+Game.prototype.passGameOverCallback = function(gameOver) {
+	this.onGameOverCallback = gameOver;
+	console.log('this.onGameOverCallback', this.onGameOverCallback);
+	
 };
 
 Game.prototype.setGameOver = function() {
 	this.gameIsOver = true;
 
-	this.reStart();
+	this.onGameOverCallback();
 };
 
-
+Game.prototype.removeGameScreen = function () {
+	this.gameScreen.remove();
+}
 
 

@@ -1,9 +1,17 @@
 body {
-    background-color: lightgray;
+    background-color: paleturquoise;
 }
 
 canvas {
     border: 15px solid yellow;
+    background-image: url(/css/images/background.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.canvas-container {
+    display: flex;
+    justify-content: center;
 }
 
 section {

@@ -10,104 +10,113 @@ function buildDom(htmlStr) {
 
 var mainContainer = document.getElementById('game-container');
 
-	function main (){
-		var game;
-		var splashScreen;
-		var gameOverScreen;
+function main() {
+	var game;
+	var splashScreen;
+	var gameOverScreen;
+	var victoryScreen;
 
-		function buildSplashScreen() {
-			splashScreen = buildDom(`
-				<main>
-					<h1>BIRB STOP!</h1>
-					<button>Start</button>
-				</main>`);
+	function createSplashScreen() {
+		splashScreen = buildDom(`
+			<main>
+				<h1>BIRB STOP!</h1>
+				<button>Start</button>
+			</main>`);
 
-			mainContainer.appendChild(splashScreen);
+		mainContainer.appendChild(splashScreen);
 
-
-			var startBtn = splashScreen.querySelector('button');
-
-			startBtn.addEventListener('click', function() {
-				startGame();
-			});
-		}
+		var startBtn = splashScreen.querySelector('button');
+		startBtn.addEventListener('click', function() {
+			startGame();
+		});
+	}
 
 	function removeSplashScreen() {
 		splashScreen.remove();
-		}
+	}
 
-	function buildGameScreen() {
+	function createGameScreen() {
 		var gameScreen = buildDom(`
 			<div>
-				<header>
-					<section class="game-status">
-						<div class="timer">
-							<span class="label">Time left:</span>
-						</div>
-					</section>
-				</header>
 				<div class="canvas-container">
 					<canvas width="860" height="550"></canvas>
 				</div>
 			</div>`)
 			
 		mainContainer.appendChild(gameScreen);
-		console.log(mainContainer);
-
 		return gameScreen;
-		}
-
-	function removeGameScreen() {
-		game.gameScreen.remove();
 	}
 
-	function buildGameOverScreen() { 
-		var gameOverScreen = buildDom(`
+	function removeGameScreen() {
+		game.removeGameScreen();
+	}
+
+	function createGameOverScreen() { 
+		gameOverScreen = buildDom(`
 			<main id="game-over-sc">
 				<h1>Game over</h1>
-				<p>Your protected your stuff for <span></span> seconds.</p>
+				<p>You couldn't protect your things from the birds.</p>
 				<button>Restart</button>
 			</main>`);
 
-		mainContainer.appendChild(gameOverScreen);
-
-		// var span = gameOverScreen.querySelector('span');
-		// span.innerText = timer;
-
 		var restartBtn = gameOverScreen.querySelector('button');
 
-		restartBtn.addEventListener('click', startGame);
+		
+		mainContainer.appendChild(gameOverScreen);
+		
+		restartBtn.addEventListener('click', function(){
+			startGame(gameOverScreen)
+		});
 	}
 
-	function removeGameOverScreen() {
+	function removeGameOverScreen() {		
 		if (gameOverScreen !== undefined) {
 			gameOverScreen.remove();
 		}
 	}
 
+	function createVictoryScreen() { 
+		victoryScreen = buildDom(`
+			<main id="victory-sc">
+				<h1>Victory!</h1>
+				<p>You protected your things from the birds, boss. I'm proud of you.</p>
+				<button>Restart</button>
+			</main>`);
+		var restartBtn = victoryScreen.querySelector('button');
+		restartBtn.addEventListener('click', startGame);
+		mainContainer.appendChild(victoryScreen);
+	}
+
+	function removeVictoryScreen() {
+		if (victoryScreen !== undefined) {
+			victoryScreen.remove();
+		}
+	}
+	
 	function startGame() {
 		removeSplashScreen();
 		removeGameOverScreen();
-
+		removeVictoryScreen();
+		
 		game = new Game();
-		game.gameScreen = buildGameScreen();
-
+		game.gameScreen = createGameScreen();
+		
 		game.start();
-		game.passGameOverCallback(function() {
-			gameOver();
-		}); //check this with game
+		game.passGameOverCallback(gameOver); 
+		game.passGameWinCallback(gameVictory);
 	}
 
 	function gameOver() {
 		removeGameScreen();
-		buildGameOverScreen();
-
-		console.log('GAME OVER - MAIN');
-
-		//func for starting over the game
+		createGameOverScreen();
 	}
 
-	buildSplashScreen();
+	function gameVictory() {
+		removeGameScreen();
+		createVictoryScreen();
+	}
+
+	createSplashScreen();
 }
 
 window.addEventListener('load', main);

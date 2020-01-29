@@ -8,11 +8,9 @@ function Game(){
 	this.player = null;
 	this.enemyArr = [];
 
-	//this.timer = 60;
 	this.gameIsOver = false;
+	this.gameWin = false;
 	this.gameScreen = null;
-
-	/*this.timer = 0;*/ //do i start it like this or??? answer: GO BACKWARDS!!
 }
 
 Game.prototype.start = function() {
@@ -34,11 +32,9 @@ Game.prototype.start = function() {
 	//event listeners for player moving
 	this.handleKeyDown = function(event) {
     if (event.key === 'ArrowUp') {
-
       this.player.setDirection('up');  
     } 
     else if (event.key === 'ArrowDown') {
-
       this.player.setDirection('down');
     } 
 	};
@@ -54,7 +50,7 @@ Game.prototype.startLoop = function() {
 		
 		//PUT THE ENEMIES IN THE SCREEN
 		if (Math.random() > 0.99) { //lower number, more enemies
-			var randomY = this.canvas.height * Math.random();
+			var randomY = (this.canvas.height - 65) * Math.random();
 				if (randomY < 15) {
 					randomY = 30;
 				} else if (randomY > 625) {
@@ -91,12 +87,9 @@ Game.prototype.startLoop = function() {
 		//LIMIT THE AMOUNT OF BIRDS
 		this.checkNumberOfBirdsLeft();
 		//END LOOP IF GAME IS OVER
-    if (!this.gameIsOver) {
+    if (!this.gameIsOver && !this.gameWin) {
       window.requestAnimationFrame(loop);
 		}
-		//UPDATE STATUS
-		this.updateGameStats();
-
   }.bind(this); //to find it again within game
 
   loop();
@@ -117,16 +110,10 @@ Game.prototype.didEnemyCollideWithPlayer = function(enemyBird) {
 	var clashPlayerTop = enemyBirdBottom > playerTop;
 	var clashPlayerBottom = enemyBirdTop < playerBottom;
 
-	var clashTop = (enemyBirdBottom > playerTop && enemyBirdRight > playerLeft && enemyBirdLeft < playerRight && enemyBirdBottom < playerBottom);
+	var clashBorders = (enemyBirdBottom > playerTop && enemyBirdRight > playerLeft && enemyBirdLeft < playerRight && enemyBirdBottom < playerBottom);
 
-	if(clashTop){
-		console.log(
-			'clashTop'
-		);
-	}
-
-	if (clashPlayerCenter && clashPlayerTop && clashPlayerBottom) {
-		enemyBird.direction *= -1;
+	if (clashPlayerCenter && clashPlayerTop && clashPlayerBottom && clashBorders) {
+		enemyBird.direction = 1;
 	}
 	return false;
 }
@@ -135,9 +122,8 @@ Game.prototype.didEnemyCollideWithPlayer = function(enemyBird) {
 Game.prototype.checkNumberOfBirdsLeft = function () {
 	console.log('this.enemyArr.length', this.enemyArr.length);
 
-	if (this.enemyArr.length === 7) {
-		this.gameIsOver = true
-		this.setGameOver();
+	if (this.enemyArr.length === 10) {
+		this.gameVictory();
 	}
 }
 
@@ -156,30 +142,29 @@ Game.prototype.didEnemyCollideWithTower = function(enemyBird) {
 	var clashTopTower = enemyBirdBottom > towerTop && enemyBirdRight > towerLeft && enemyBirdLeft < towerRight && enemyBirdBottom < towerBottom;
 
 	if (clashTower && clashTopTower) {
-		this.setGameOver();
+		this.gameOver();
 	}
 	return false;
 };
 
-Game.prototype.updateGameStats = function() {
-	//this.timer--;
-	//this.timerElement.innerHTML = this.timer;
-};
-
-Game.prototype.passGameOverCallback = function(gameOver) {
-	this.onGameOverCallback = gameOver;
-	console.log('this.onGameOverCallback', this.onGameOverCallback);
-	
-};
-
-Game.prototype.setGameOver = function() {
+Game.prototype.gameOver = function() {
 	this.gameIsOver = true;
-
-	this.onGameOverCallback();
+	this.reStartLoss();
 };
+
+Game.prototype.gameVictory = function() {
+	this.gameWin = true;
+	this.reStartWin();
+}
 
 Game.prototype.removeGameScreen = function () {
 	this.gameScreen.remove();
 }
 
+Game.prototype.passGameOverCallback = function(gameOverFunc) {
+	this.reStartLoss = gameOverFunc;
+};
 
+Game.prototype.passGameWinCallback = function(gameVictoryFunc) {
+	this.reStartWin = gameVictoryFunc;
+};

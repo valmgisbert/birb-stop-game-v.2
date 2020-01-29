@@ -14,10 +14,11 @@ function Game(){
 	this.hasTen = false;
 }
 //enemyBird.hasCollided = false;
+//YOU ONLY FINISH THE GAME WHEN THE FLAG IS TRUE AND THE ARRAY IS EMPTY
 //cuando pega con la barrera, cambia a true
 //para de fabricar pajaros al llegar a 9-10
 Game.prototype.start = function() {
-	this.canvasContainer = document.querySelector('.canvas-container');
+this.canvasContainer = document.querySelector('.canvas-container');
   this.canvas = this.canvasContainer.querySelector('canvas');
 	this.ctx = this.canvas.getContext('2d');
 	
@@ -50,7 +51,7 @@ Game.prototype.start = function() {
 
 Game.prototype.startLoop = function() {
 	var loop = function() {
-		if (this.enemyArr.length === 10) {
+		if (this.enemyArr.length === 5) {
 			console.log('trueeeeeeeeeee');
 			
 			this.hasTen = true;
@@ -80,7 +81,14 @@ Game.prototype.startLoop = function() {
 			this.didEnemyCollideWithPlayer(enemyBirdObj);
 			//CHECK COLLS TO TOWER
 			this.didEnemyCollideWithTower(enemyBirdObj);
-		}.bind(this));
+    }.bind(this));
+      //UPDATE ENEMIES AND CHECK IF THEY ARE IN OR OUT OF SCREEN
+
+    
+   this.enemyArr = this.enemyArr.filter(function(enemyBirdObj) {
+     enemyBirdObj.updatePosition();
+     return enemyBirdObj.isInsideScreen();
+   });
 		
 		//CLEAR CANVAS
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -132,11 +140,14 @@ Game.prototype.didEnemyCollideWithPlayer = function(enemyBird) {
 	return false;
 }
 
-
+// Game.prototype.checkIfBirdsInsideOfScreen = function () {
+//   if ()
+// }
+// //less than 0 and bigger than x
 Game.prototype.checkNumberOfBirdsLeft = function () {
 	console.log('this.enemyArr.length', this.enemyArr.length);
 
-	if ((this.hasTen === true) && (this.enemyArr[this.enemyArr.length-1].x > this.canvas.width)) { //&& all enemies hasCollided=true; and be out of screen
+	if ((this.hasTen === true) && (this.enemyArr.length < 1)) { 
 		console.log('out');
 		
 		this.gameVictory();

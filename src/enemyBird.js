@@ -34,3 +34,11 @@ if(this.direction === -1){
 EnemyBird.prototype.updatePosition = function() {
 	this.x = this.x + this.speed*this.direction;
 }
+
+EnemyBird.prototype.isInsideScreen = function() {
+  if(this.direction === 1 && this.x >= this.canvas.width){
+    return this.x > this.canvas.width;
+  } else {
+    return this.x + this.size > 0;}
+};
+

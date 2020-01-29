@@ -11,8 +11,11 @@ function Game(){
 	this.gameIsOver = false;
 	this.gameWin = false;
 	this.gameScreen = null;
+	this.hasTen = false;
 }
-
+//enemyBird.hasCollided = false;
+//cuando pega con la barrera, cambia a true
+//para de fabricar pajaros al llegar a 9-10
 Game.prototype.start = function() {
 	this.canvasContainer = document.querySelector('.canvas-container');
   this.canvas = this.canvasContainer.querySelector('canvas');
@@ -47,19 +50,25 @@ Game.prototype.start = function() {
 
 Game.prototype.startLoop = function() {
 	var loop = function() {
-		
+		if (this.enemyArr.length === 10) {
+			console.log('trueeeeeeeeeee');
+			
+			this.hasTen = true;
+		}
 		//PUT THE ENEMIES IN THE SCREEN
-		if (Math.random() > 0.99) { //lower number, more enemies
+			if (Math.random() > 0.95 && this.hasTen === false) { //lower number, more enemies
+				console.log('creating');
+				
 			var randomY = (this.canvas.height - 65) * Math.random();
-				if (randomY < 15) {
+			if (randomY < 15) {
 					randomY = 30;
 				} else if (randomY > 625) {
 					randomY = 625; //limiting Y
 				};
 
-			var newEnemy = new EnemyBird(this.canvas, randomY, parseInt(5 * Math.random())) //using the template form the enemy.js [YOU CAN RANDOM SPEED]
+			var newEnemy = new EnemyBird(this.canvas, randomY, 1) //using the template form the enemy.js [YOU CAN RANDOM SPEED]
 			this.enemyArr.push(newEnemy); //to add every enemy appearing to the array
-		}
+		} 
 		//UPDATE PLAYER
 		this.player.updatePosition();
 		//HANDLESCREENCOLS FOR PLAYER
@@ -95,6 +104,8 @@ Game.prototype.startLoop = function() {
   loop();
 };
 
+//isInsideScreen for filtering the birds inside the canvas
+
 Game.prototype.didEnemyCollideWithPlayer = function(enemyBird) {
 	var playerRight = this.player.x + this.player.width;
 	var playerLeft = this.player.x;
@@ -114,6 +125,9 @@ Game.prototype.didEnemyCollideWithPlayer = function(enemyBird) {
 
 	if (clashPlayerCenter && clashPlayerTop && clashPlayerBottom && clashBorders) {
 		enemyBird.direction = 1;
+		enemyBird.hasCollided = true; 
+		//console.log(this.enemyArr[this.enemyArr.length-1].x, this.canvas.width);
+		
 	}
 	return false;
 }
@@ -122,7 +136,9 @@ Game.prototype.didEnemyCollideWithPlayer = function(enemyBird) {
 Game.prototype.checkNumberOfBirdsLeft = function () {
 	console.log('this.enemyArr.length', this.enemyArr.length);
 
-	if (this.enemyArr.length === 10) {
+	if ((this.hasTen === true) && (this.enemyArr[this.enemyArr.length-1].x > this.canvas.width)) { //&& all enemies hasCollided=true; and be out of screen
+		console.log('out');
+		
 		this.gameVictory();
 	}
 }
@@ -135,7 +151,7 @@ Game.prototype.didEnemyCollideWithTower = function(enemyBird) {
 
 	var enemyBirdLeft = enemyBird.x;
 	var enemyBirdRight = enemyBird.x + enemyBird.size;
-	var enemyBirdTop = enemyBird.y;
+	var enemyBirdTop = enemyBird.y; //CHECK THIS
 	var enemyBirdBottom = enemyBird.y + enemyBird.size;
 
 	var clashTower = enemyBirdLeft <= towerRight && enemyBirdRight >= towerLeft;
@@ -154,6 +170,7 @@ Game.prototype.gameOver = function() {
 
 Game.prototype.gameVictory = function() {
 	this.gameWin = true;
+	//check if all enemies have collided, 
 	this.reStartWin();
 }
 

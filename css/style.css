@@ -4,7 +4,7 @@ body {
 
 canvas {
     border: 15px solid yellow;
-    background-image: url(/css/images/background.jpg);
+    background-image: url(/css/images/backgroundalt.png);
     background-repeat: no-repeat;
     background-size: cover;
 }

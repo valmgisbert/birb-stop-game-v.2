@@ -4,10 +4,10 @@ function Player(canvas){
 	this.canvas = canvas;
 	this.ctx = canvas.getContext('2d');
   this.x = 200;
-  this.y = canvas.height / 2; //TRY IT OUT
+  this.y = canvas.height / 2; 
   this.width = 35;
   this.height = 155;
-  this.speed = 5; 
+  this.speed = 7; 
   this.direction = 0;
 }
 
@@ -19,8 +19,10 @@ Player.prototype.setDirection = function(direction) {
 
 Player.prototype.draw = function(){
 	this.ctx.fillStyle = 'white';
-  //fillRect(x, y, width, height)
-  this.ctx.fillRect(
+  var img = new Image();
+  img.src = "./css/images/barrieredit.png";
+  this.ctx.drawImage(
+    img,
     this.x,
     this.y,
     this.width,

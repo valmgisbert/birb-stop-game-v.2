@@ -11,12 +11,12 @@ function Game(){
 	this.gameIsOver = false;
 	this.gameWin = false;
 	this.gameScreen = null;
-	this.hasTen = false;
+  this.arrIsFull = false;
+  
+  this.clashSound = new Audio ("./css/sounds/no-god-short.mp3")
+  this.gameOverSound = new Audio ("./css/sounds/no-god-gameover.mp3")
 }
-//enemyBird.hasCollided = false;
-//YOU ONLY FINISH THE GAME WHEN THE FLAG IS TRUE AND THE ARRAY IS EMPTY
-//cuando pega con la barrera, cambia a true
-//para de fabricar pajaros al llegar a 9-10
+
 Game.prototype.start = function() {
 this.canvasContainer = document.querySelector('.canvas-container');
   this.canvas = this.canvasContainer.querySelector('canvas');
@@ -51,24 +51,20 @@ this.canvasContainer = document.querySelector('.canvas-container');
 
 Game.prototype.startLoop = function() {
 	var loop = function() {
-		if (this.enemyArr.length === 5) {
-			console.log('trueeeeeeeeeee');
-			
-			this.hasTen = true;
+		if (this.enemyArr.length === 8) {
+			this.arrIsFull = true;
 		}
 		//PUT THE ENEMIES IN THE SCREEN
-			if (Math.random() > 0.95 && this.hasTen === false) { //lower number, more enemies
-				console.log('creating');
-				
-			var randomY = (this.canvas.height - 65) * Math.random();
-			if (randomY < 15) {
-					randomY = 30;
-				} else if (randomY > 625) {
-					randomY = 625; //limiting Y
-				};
+			if (Math.random() > 0.95 && this.arrIsFull === false) { //lower number, more enemies
+			 var randomY = (this.canvas.height - 65) * Math.random();
+			 if (randomY < 15) {
+			 		randomY = 30;
+			 	} else if (randomY > 625) {
+			 		randomY = 625; //limiting Y
+			 	};
 
-			var newEnemy = new EnemyBird(this.canvas, randomY, 1) //using the template form the enemy.js [YOU CAN RANDOM SPEED]
-			this.enemyArr.push(newEnemy); //to add every enemy appearing to the array
+			 var newEnemy = new EnemyBird(this.canvas, randomY, 3); //using the template form the enemy.js [YOU CAN RANDOM SPEED]
+			 this.enemyArr.push(newEnemy); //to add every enemy appearing to the array
 		} 
 		//UPDATE PLAYER
 		this.player.updatePosition();
@@ -83,10 +79,8 @@ Game.prototype.startLoop = function() {
 			this.didEnemyCollideWithTower(enemyBirdObj);
     }.bind(this));
       //UPDATE ENEMIES AND CHECK IF THEY ARE IN OR OUT OF SCREEN
-
-    
    this.enemyArr = this.enemyArr.filter(function(enemyBirdObj) {
-     enemyBirdObj.updatePosition();
+
      return enemyBirdObj.isInsideScreen();
    });
 		
@@ -123,7 +117,9 @@ Game.prototype.didEnemyCollideWithPlayer = function(enemyBird) {
 	var enemyBirdLeft = enemyBird.x;
 	var enemyBirdRight = enemyBird.x + enemyBird.size;
 	var enemyBirdTop = enemyBird.y;
-	var enemyBirdBottom = enemyBird.y + enemyBird.size;
+  var enemyBirdBottom = enemyBird.y + enemyBird.size;
+  
+  
 
 	var clashPlayerCenter = enemyBirdLeft <= playerRight && enemyBirdRight >= playerLeft;
 	var clashPlayerTop = enemyBirdBottom > playerTop;
@@ -133,23 +129,20 @@ Game.prototype.didEnemyCollideWithPlayer = function(enemyBird) {
 
 	if (clashPlayerCenter && clashPlayerTop && clashPlayerBottom && clashBorders) {
 		enemyBird.direction = 1;
-		enemyBird.hasCollided = true; 
+    enemyBird.hasCollided = true; 
+    
+    this.clashSound.play();
+      this.clashSound.currentTime = 0;
 		//console.log(this.enemyArr[this.enemyArr.length-1].x, this.canvas.width);
 		
 	}
 	return false;
 }
 
-// Game.prototype.checkIfBirdsInsideOfScreen = function () {
-//   if ()
-// }
-// //less than 0 and bigger than x
 Game.prototype.checkNumberOfBirdsLeft = function () {
 	console.log('this.enemyArr.length', this.enemyArr.length);
 
-	if ((this.hasTen === true) && (this.enemyArr.length < 1)) { 
-		console.log('out');
-		
+	if ((this.arrIsFull === true) && (this.enemyArr.length < 1)) { 
 		this.gameVictory();
 	}
 }
@@ -169,13 +162,15 @@ Game.prototype.didEnemyCollideWithTower = function(enemyBird) {
 	var clashTopTower = enemyBirdBottom > towerTop && enemyBirdRight > towerLeft && enemyBirdLeft < towerRight && enemyBirdBottom < towerBottom;
 
 	if (clashTower && clashTopTower) {
-		this.gameOver();
+    this.gameOver();
 	}
 	return false;
 };
 
 Game.prototype.gameOver = function() {
-	this.gameIsOver = true;
+  this.gameIsOver = true;
+  this.gameOverSound.play();
+    this.gameOverSound.currentTime = 0;
 	this.reStartLoss();
 };
 

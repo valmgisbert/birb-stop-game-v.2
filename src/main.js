@@ -19,8 +19,15 @@ function main() {
 	function createSplashScreen() {
 		splashScreen = buildDom(`
 			<main>
-				<h1>BIRB STOP!</h1>
-				<button>Start</button>
+				<div id="game-logo">
+					<img src="/css/images/logo.png" />
+				</div>
+				<span class="instructions">
+					<p>Move the barrier up and down using the UP and DOWN arrow keys.<br>
+				Protect the tower and push the birds back! <br>If they touch the tower, it's game over!
+					</p>
+				</span>
+				<button></button>
 			</main>`);
 
 		mainContainer.appendChild(splashScreen);
@@ -54,9 +61,11 @@ function main() {
 	function createGameOverScreen() { 
 		gameOverScreen = buildDom(`
 			<main id="game-over-sc">
-				<h1>Game over</h1>
+				<div id="game-over-header">
+					<img src="/css/images/lossheader.png" />
+				</div>
 				<p>You couldn't protect your things from the birds.</p>
-				<button>Restart</button>
+				<button></button>
 			</main>`);
 
 		var restartBtn = gameOverScreen.querySelector('button');
@@ -78,9 +87,11 @@ function main() {
 	function createVictoryScreen() { 
 		victoryScreen = buildDom(`
 			<main id="victory-sc">
-				<h1>Victory!</h1>
-				<p>You protected your things from the birds, boss. I'm proud of you.</p>
-				<button>Restart</button>
+				<div id="game-win-header">
+					<img src="/css/images/victoryheader.png" />
+				</div>
+				<p>You protected your things from the birds, boss. <br> I'm proud of you.</p>
+				<button></button>
 			</main>`);
 		var restartBtn = victoryScreen.querySelector('button');
 		restartBtn.addEventListener('click', startGame);

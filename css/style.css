@@ -1,17 +1,26 @@
 body {
-    background-color: paleturquoise;
+    background-color: #72f4e9;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='72' viewBox='0 0 36 72'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23f2ee71' fill-opacity='0.75'%3E%3Cpath d='M2 6h12L8 18 2 6zm18 36h12l-6 12-6-12z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    font-family: 'Jura', sans-serif;
+    height: 95vh;
+    display: flex;
+    justify-content: center;
+
+    font-weight: bold;
 }
 
 canvas {
-    border: 15px solid yellow;
-    background-image: url(/css/images/backgroundalt.png);
+    border: 15px solid orange;
+    background: rgba(27, 19, 19, 0.459);
+    background-image: url('/css/images/backgroundalt2.png');
     background-repeat: no-repeat;
     background-size: cover;
+    background-blend-mode: overlay;
 }
 
 .canvas-container {
     display: flex;
-    justify-content: center;;
+    justify-content: center;
 }
 
 section {
@@ -20,7 +29,63 @@ section {
     flex-direction: column;
 }
 
-button {
-    color: white;
-    background-color: tomato;
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    text-align: center;
+    line-height: 2em;
 }
+
+#game-logo {
+    width: auto;
+    height: auto;
+    text-align: center;
+}
+
+main button {
+    padding: 3.2em 9.5em; 
+    background: transparent;
+    border-color: transparent;
+    background-image: url('/css/images/startbtn.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    outline: none;
+}
+
+#victory-sc {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#victory-sc button {
+    padding: 2.4em 9.5em; 
+    background: transparent;
+    border-color: transparent;
+    background-image: url('/css/images/restarbtnorange.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    outline: none;
+}
+
+#game-over-sc {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-over-sc button {
+    padding: 3.2em 9.5em; 
+    background: transparent;
+    border-color: transparent;
+    background-image: url('/css/images/retrybtn.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    outline: none;
+}
+

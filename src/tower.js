@@ -12,7 +12,7 @@ function Tower(canvas) {
 Tower.prototype.draw = function(){
   this.ctx.fillStyle = 'black';
   var img = new Image();
-  img.src = "./css/images/stackedtower.png";
+  img.src = "./css/images/stackedtoweract.png";
   //fillRect(x, y, width, height)
   this.ctx.drawImage(
   	img,

@@ -20,7 +20,7 @@ function main() {
 		splashScreen = buildDom(`
 			<main>
 				<div id="game-logo">
-					<img src="/css/images/logo.png" />
+					<img src="./css/images/logo.png" />
 				</div>
 				<span class="instructions">
 					<p>Move the barrier up and down using the UP and DOWN arrow keys.<br>
@@ -62,7 +62,7 @@ function main() {
 		gameOverScreen = buildDom(`
 			<main id="game-over-sc">
 				<div id="game-over-header">
-					<img src="/css/images/lossheader.png" />
+					<img src="./css/images/lossheader.png" />
 				</div>
 				<p>You couldn't protect your things from the birds.</p>
 				<button></button>
@@ -88,7 +88,7 @@ function main() {
 		victoryScreen = buildDom(`
 			<main id="victory-sc">
 				<div id="game-win-header">
-					<img src="/css/images/victoryheader.png" />
+					<img src="./css/images/victoryheader.png" />
 				</div>
 				<p>You protected your things from the birds, boss. <br> I'm proud of you.</p>
 				<button></button>

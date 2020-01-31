@@ -13,8 +13,9 @@ function Game(){
 	this.gameScreen = null;
   this.arrIsFull = false;
   
-  this.clashSound = new Audio ("./css/sounds/no-god-short.mp3")
-  this.gameOverSound = new Audio ("./css/sounds/no-god-gameover.mp3")
+  this.clashSound = new Audio ("./css/sounds/no-god-short.mp3");
+  this.gameOverSound = new Audio ("./css/sounds/no-god-gameover.mp3");
+  this.victorySound = new Audio ("./css/sounds/birb-victory.wav");
 }
 
 Game.prototype.start = function() {
@@ -175,7 +176,9 @@ Game.prototype.gameOver = function() {
 };
 
 Game.prototype.gameVictory = function() {
-	this.gameWin = true;
+  this.gameWin = true;
+  this.victorySound.play();
+      this.victorySound.currentTime = 0;
 	//check if all enemies have collided, 
 	this.reStartWin();
 }

@@ -4,8 +4,12 @@
 Birb Stop is a game where the player has to, well, stop their bird from destroying their carefully organized stack of things. After 20 seconds surviving, the speed intervals randomize themselves and get quicker for higher difficulty. If you survive 1 minute you win the game. If the bird gets to pass your barrier, it’s game over.
 
 
-// ## MVP (DOM - CANVAS)
-This is a game where the player uses a barrier to stop the enemy bird from getting to the tower.
+## MVP (DOM - CANVAS)
+-- Player uses a barrier that moves vertically.
+-- Birds appear randomly on the left side of the screen.
+-- The birds change irection when they touch the barrier.
+-- If a bird collides with the tower, the game ends.
+
 --------
 
 ## Backlog
@@ -49,20 +53,15 @@ Game(){
   this.birdEnemies;
 }
 
-Game.prototype.start = function(){
-}
+start()
 
-Game.prototype.startLoop = function(){
-}
+startLoop()
 
-Game.prototype.checkCollisionsToTower = function(){
-}
+checkCollisionsToTower()
 
-Game.prototype.checkCollisionsToPlayer = function(){
-}
+checkCollisionsToPlayer()
 
-Game.prototype.setGameOver = function(){
-}
+setGameOver()
 ```
 
 ### player.js
@@ -77,11 +76,9 @@ Player(){
   this.direction;
 }
 
-Player.prototype.draw = function(){
-}
+draw()
 
-Player.prototype.updatePosition = function(){
-}
+updatePosition()
 
 
 ```
@@ -98,14 +95,11 @@ EnemyBird(){
   this.height;
 }
 
-EnemyBird.prototype.updatePosition(){
-}
+updatePosition()
 
-EnemyBird.prototype.bounceBack(){
-}
+bounceBack()
 
-EnemyBird.prototype.draw(){
-}
+draw()
 
 ```
 
@@ -119,8 +113,7 @@ Tower(){
   this.height;
 }
 
-Tower.prototype.draw(){
-}
+draw()
 
 ```
 
@@ -132,7 +125,7 @@ Tower.prototype.draw(){
   - addEventListener(startGame)
   
   
-- starGame()
+- startGame()
   - create new Game()
   - game.start()
   
@@ -172,13 +165,13 @@ Tower.prototype.draw(){
 
 ### Git
 URls for the project repo and deploy
-[Link Repo]
-[Link Deploy]
+[Link Repo](https://github.com/valmgisbert/birb-stop-game-v.2/)
+[Link Deploy](https://valmgisbert.github.io/birb-stop-game-v.2/)
 
 
 ### Slides
 URls for the project presentation (slides)
-[Link Slides.com]
+[Link Slides](https://docs.google.com/presentation/d/1xHrsnaDQCRyFKnbXI8uwNGIqQXnX85mA20rLVP9v9pw/edit?usp=sharing)
 
 
 

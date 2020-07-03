@@ -1,24 +1,24 @@
-# BIRB-STOP
+# BIRB STOP!
 
 ## Description
 Birb Stop is a game where the player has to, well, stop their bird from destroying their carefully organized stack of things. After 20 seconds surviving, the speed intervals randomize themselves and get quicker for higher difficulty. If you survive 1 minute you win the game. If the bird gets to pass your barrier, it’s game over.
 
 
 ## MVP (DOM - CANVAS)
--- Player uses a barrier that moves vertically.
--- Birds appear randomly on the left side of the screen.
--- The birds change irection when they touch the barrier.
--- If a bird collides with the tower, the game ends.
+- Player uses a barrier that moves vertically.
+- Birds appear randomly on the left side of the screen.
+- The birds change irection when they touch the barrier.
+- If a bird collides with the tower, the game ends.
 
 --------
 
 ## Backlog
--- Timer
--- Lives
--- Harder mode ‘left + right’
--- Harder mode ‘left + right + up’
--- Game over screen specifically for the ‘left + right’ mode
--- Game over screen specifically for the ‘left + right + up’ mode
+- Timer
+- Lives
+- Harder mode ‘left + right’
+- Harder mode ‘left + right + up’
+- Game over screen specifically for the ‘left + right’ mode
+- Game over screen specifically for the ‘left + right + up’ mode
 
 
 ## Data structure
@@ -164,14 +164,14 @@ draw()
 
 
 ### Git
-URls for the project repo and deploy
-[Link Repo](https://github.com/valmgisbert/birb-stop-game-v.2/)
-[Link Deploy](https://valmgisbert.github.io/birb-stop-game-v.2/)
+URLs for the project repo and deploy
+- [Link Repo](https://github.com/valmgisbert/birb-stop-game-v.2/)
+- [Link Deploy](https://valmgisbert.github.io/birb-stop-game-v.2/)
 
 
 ### Slides
-URls for the project presentation (slides)
-[Link Slides](https://docs.google.com/presentation/d/1xHrsnaDQCRyFKnbXI8uwNGIqQXnX85mA20rLVP9v9pw/edit?usp=sharing)
+URLs for the project presentation 
+- [Link Slides](https://docs.google.com/presentation/d/1xHrsnaDQCRyFKnbXI8uwNGIqQXnX85mA20rLVP9v9pw/edit?usp=sharing)
 
 
 
